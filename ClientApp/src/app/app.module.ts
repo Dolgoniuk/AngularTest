@@ -9,7 +9,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {GridComponent} from './grid/grid.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
-import {MatInputModule} from '@angular/material';
+import {MatInputModule, MatPaginatorModule} from '@angular/material';
 import {UserEditDialogComponent} from './grid/user-edit-dialog.component';
 
 @NgModule({
@@ -28,7 +28,8 @@ import {UserEditDialogComponent} from './grid/user-edit-dialog.component';
       {path: '', component: GridComponent, pathMatch: 'full'},
     ]),
     BrowserAnimationsModule,
-    MatInputModule
+    MatInputModule,
+    MatPaginatorModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}

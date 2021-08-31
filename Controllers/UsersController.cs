@@ -18,9 +18,15 @@ namespace AngularTest.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<UserDto> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Paged<UserDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Get([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
-            return _userStore.GetAll();
+            if (page < 1 || size < 1)
+                return BadRequest();
+
+            var result = _userStore.GetPaged(page, size);
+            return Ok(result);
         }
         
         [HttpPost]

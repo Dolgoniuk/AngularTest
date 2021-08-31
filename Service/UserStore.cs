@@ -6,45 +6,18 @@ namespace AngularTest.Service
 {
     public class UserStore
     {
-        private List<UserDto> _userDtos = new()
+        private readonly List<UserDto> _userDtos = new();
+        public UserStore()
         {
-            new()
-            {
-                Id = 1,
-                Email = "some@email.com",
-                FirstName = "Petr",
-                LastName = "Petrov",
-                MobilePhone = "55555555"
-            },
-            new()
-            {
-                Id = 2,
-                Email = "other@email.com",
-                FirstName = "Ivan",
-                LastName = "Ivanov",
-                MobilePhone = "33333333"
-            },
-            new()
-            {
-                Id = 3,
-                Email = "new@email.com",
-                FirstName = "Sidor",
-                LastName = "Sidorov",
-                MobilePhone = "11111111"
-            }
-        };
-
+            GenerateTestData();
+        }
+        
         public UserDto Add(UserDto user)
         {
-            var maxId = _userDtos.Select(u => u.Id).Max();
+            var maxId = _userDtos.Count == 0 ? 0 : _userDtos.Select(u => u.Id).Max();
             user.Id = maxId + 1;
             _userDtos.Add(user);
             return user;
-        }
-        
-        public IEnumerable<UserDto> GetAll()
-        {
-            return _userDtos.AsEnumerable();
         }
 
         public UserDto Get(int id)
@@ -68,7 +41,31 @@ namespace AngularTest.Service
                 userDto.MobilePhone = user.MobilePhone;
                 return userDto;
             }
+
             return null;
+        }
+        
+        private void GenerateTestData()
+        {
+            for (var i = 0; i < 40; i++)
+            {
+                Add(new UserDto
+                {
+                    FirstName = Faker.Name.First(),
+                    LastName = Faker.Name.Last(),
+                    MobilePhone = $"{Faker.RandomNumber.Next(11111,99999)}-{Faker.RandomNumber.Next(111,999)}",
+                    Email = Faker.Internet.Email(),
+                });
+            }
+        }
+
+        public Paged<UserDto> GetPaged(int page, int size)
+        {
+            return new Paged<UserDto>
+            {
+                Items = _userDtos.Skip((page-1)*size).Take(size).AsEnumerable(),
+                Total = _userDtos.Count
+            };
         }
     }
 }

@@ -1,8 +1,9 @@
-import {Component, OnInit, Optional, TemplateRef, ViewChild} from '@angular/core';
-import {UserDto} from '../userApi/user.dto';
+import {AfterViewInit, Component, OnInit, Optional, ViewChild} from '@angular/core';
+import {Paged, UserDto} from '../userApi/user.dto';
 import {UserService} from '../userApi/user.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {UserEditDialogComponent} from './user-edit-dialog.component';
+import {MatPaginator} from '@angular/material';
 
 @Component({
   selector: 'app-grid',
@@ -10,22 +11,31 @@ import {UserEditDialogComponent} from './user-edit-dialog.component';
   styleUrls: ['./grid.component.css'],
   providers: [UserService],
 })
-export class GridComponent implements OnInit {
-  users: Array<UserDto>;
-  statusMessage = '';
-
+export class GridComponent implements OnInit, AfterViewInit {
   constructor(private serv: UserService, private dialog: MatDialog,
               @Optional() public dialogRef: MatDialogRef<UserDto>) {
     this.users = new Array<UserDto>();
   }
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  page = 1;
+  size = 10;
+  total = 0;
+  users: Array<UserDto>;
 
   ngOnInit() {
-    this.loadUsers();
+    this.loadPaged(this.page, this.size);
   }
 
-  private loadUsers() {
-    this.serv.getUsers().subscribe((data: Array<UserDto>) => {
-      this.users = data;
+  ngAfterViewInit() {
+    this.paginator.page.subscribe((event) => {
+      this.loadPaged(event.pageIndex +1, event.pageSize);
+    });
+  }
+
+  private loadPaged(page: number, size: number) {
+    this.serv.getPaged(page, size).subscribe((data: Paged<UserDto>) => {
+      this.users = data.items;
+      this.total = data.total;
     });
   }
 
@@ -58,8 +68,7 @@ export class GridComponent implements OnInit {
 
   deleteUser(user: UserDto) {
     this.serv.deleteUser(user.id).subscribe(data => {
-      this.statusMessage = 'Данные успешно удалены',
-        this.loadUsers();
+      this.loadPaged(this.page, this.size);
     });
   }
 }

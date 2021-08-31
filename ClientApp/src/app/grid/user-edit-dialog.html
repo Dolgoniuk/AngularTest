@@ -16,24 +16,27 @@
   </div>
 
   <br>
-  <input [disabled]="firstName.invalid || lastName.invalid || phone.invalid || email.invalid"
-         type="button" value="OK" style="background: green" [mat-dialog-close]="_editUser"/>
+  <input [ngStyle]="(firstName.invalid || lastName.invalid || phone.invalid || email.invalid)
+         ? {'background' : 'darkgrey'} : {'background' : 'green', 'pointer-events':'none'}"
+         [ngClass]="{'notValid' :(firstName.invalid || lastName.invalid || phone.invalid || email.invalid)}"
+         type="button" value="OK" [mat-dialog-close]="_editUser"/>
   <input type="button" value="CANCEL" (click)="onCancelClick()" class="btn-secondary"/>
   <table class="flex-wrap" style="width:100%">
     <tr>
-      <td><span>First name <b>*</b></span></td>
+      <td class="text-right font-weight-bold w-auto"><span>First name <b>*</b></span></td>
       <td><input type="text" [(ngModel)]="_editUser.firstName" #firstName="ngModel" matInput min="3" required></td>
     </tr>
     <tr>
-      <td><span>Last name <b>*</b></span></td>
+      <td class="text-right font-weight-bold w-auto"><span>Last name <b>*</b></span></td>
       <td><input type="text" [(ngModel)]="_editUser.lastName" #lastName="ngModel" matInput min="3" required></td>
     </tr>
     <tr>
-      <td><span>Mobile phone</span></td>
-      <td><input type="text" [(ngModel)]="_editUser.mobilePhone" #phone="ngModel" matInput pattern="[0-9]{5}-[0-9]{3}"></td>
+      <td class="text-right font-weight-bold w-auto"><span>Mobile phone</span></td>
+      <td><input type="text" [(ngModel)]="_editUser.mobilePhone" #phone="ngModel" matInput pattern="[0-9]{5}-[0-9]{3}">
+      </td>
     </tr>
     <tr>
-      <td><span>Email</span></td>
+      <td class="text-right font-weight-bold w-auto"><span>Email</span></td>
       <td><input type="email" [(ngModel)]="_editUser.email" #email="ngModel" matInput email></td>
     </tr>
 

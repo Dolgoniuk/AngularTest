@@ -1,19 +1,13 @@
 .modal-content-wrapper {
   border: 2px solid white;
-  width: 80%;
-  display: block;
-  position: fixed;
   padding: 30px;
   background: black;
-  margin-left: auto;
-  margin-right: auto;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   top: 10%;
 }
 
-td {
-  text-align: right;
-  font-weight: bold;
-}
 
 td > input {
   width:100%;
@@ -41,5 +35,3 @@ div > input {
   background: #e01a2b;
   color: white;
 }
-
-

@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {UserDto} from './user.dto';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Paged, UserDto} from './user.dto';
+import {query} from '@angular/animations';
 
 @Injectable()
 export class UserService {
@@ -8,9 +9,11 @@ export class UserService {
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
       this.url = baseUrl + 'users';
   }
-
-  getUsers() {
-    return this.http.get<Array<UserDto>>(this.url);
+  getPaged(page: number, size: number) {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Paged<UserDto>>(this.url, {params: params});
   }
   createUser(user: UserDto) {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/json');
