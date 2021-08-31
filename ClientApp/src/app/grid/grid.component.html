@@ -1,0 +1,35 @@
+<input type="button" value="Add" class="btn btn-primary" (click)="addUser()" />
+<table class="table table-striped">
+  <thead>
+  <tr class="text-center font-weight-bold">
+    <td>First name</td>
+    <td>Last name</td>
+    <td>Mobile phone</td>
+    <td>Email</td>
+    <td></td>
+    <td></td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <ng-template [ngTemplateOutlet]="this.rowTemplate"
+                 [ngTemplateOutletContext]="{ $implicit: user}">
+    </ng-template>
+  </tr>
+  </tbody>
+</table>
+<div>{{statusMessage}}</div>
+
+<!--row template-->
+<ng-template #rowTemplate let-user>
+  <td class="col-2">{{user.firstName}}</td>
+  <td class="col-2">{{user.lastName}}</td>
+  <td class="col-2">{{user.mobilePhone}}</td>
+  <td class="col-2">{{user.email}}</td>
+  <td class="col-1">
+    <input type="button" value="EDIT" class="btn btn-secondary" (click)="editUser(user)" />
+  </td>
+  <td class="col-1">
+    <input type="button" value="REMOVE" (click)="deleteUser(user)" class="btn btn-danger" />
+  </td>
+</ng-template>
